@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/games_grid.dart';
 import '../widgets/categories_list.dart';
+import 'add_game_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,16 +30,27 @@ class HomeScreen extends StatelessWidget {
         ),
         drawer: const AppDrawer(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print('Añadir nuevo juego');
-          },
           child: const Icon(Icons.add),
+          onPressed: () async {
+            final resultado = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AddGameScreen()),
+            );
+
+            if (resultado != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Juego añadido: ${resultado['titulo']}'),
+                ),
+              );
+            }
+          },
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
-            const GamesGrid(),
-            const Center(child: Text('Aquí aparecerán tus favoritos')),
-            const CategoriesList(),
+            GamesGrid(),
+            Center(child: Text('Aquí aparecerán tus favoritos')),
+            CategoriesList(),
           ],
         ),
       ),
